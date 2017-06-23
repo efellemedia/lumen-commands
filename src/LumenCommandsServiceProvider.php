@@ -2,7 +2,9 @@
 
 namespace Efelle\LumenCommands;
 
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
+use Efelle\LumenCommands\Console\ConsoleMakeCommand;
 use Efelle\LumenCommands\Console\KeyGenerateCommand;
 
 class LumenCommandsServiceProvider extends ServiceProvider
@@ -24,7 +26,22 @@ class LumenCommandsServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerConsoleMakeCommand();
         $this->registerKeyGenerateCommand();
+    }
+    
+    /**
+     * Register the key:generate command.
+     */
+    protected function registerConsoleMakeCommand()
+    {
+        $this->app->singleton(ConsoleMakeCommand::class, function () {
+            $filesystem = app()->make(Filesystem::class);
+            
+            return new ConsoleMakeCommand($filesystem);
+        });
+        
+        $this->commands(ConsoleMakeCommand::class);
     }
     
     /**
@@ -35,6 +52,8 @@ class LumenCommandsServiceProvider extends ServiceProvider
         $this->app->singleton(KeyGenerateCommand::class, function () {
             return new KeyGenerateCommand;
         });
+        
+        $this->commands(KeyGenerateCommand::class);
     }
     
     /**
@@ -45,6 +64,7 @@ class LumenCommandsServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
+            ConsoleMakeCommand::class,
             KeyGenerateCommand::class,
         ];
     }
