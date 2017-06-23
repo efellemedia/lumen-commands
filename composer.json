@@ -1,0 +1,14 @@
+{
+    "name": "efellemedia/lumen-commands",
+    "description": "Adds some core Laravel commands back into Lumen for convenience.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Efelle\\LumenCommands\\": "src"
+        }
+    },
+    "require": {
+        "illuminate/support": "^5.4"
+    }
+}
